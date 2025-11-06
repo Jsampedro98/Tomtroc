@@ -11,8 +11,8 @@
         <div class="container">
             <nav class="nav">
                 <div class="nav-brand">
-                    <a href="<?= APP_URL ?>">
-                        <h1><?= APP_NAME ?></h1>
+                    <a href="<?= APP_URL ?>" class="logo">
+                        <img src="<?= APP_URL ?>/images/logo.svg" alt="Tom Troc Logo" class="logo-img">
                     </a>
                 </div>
                 <ul class="nav-menu">
