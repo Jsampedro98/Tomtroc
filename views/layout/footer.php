@@ -1,9 +1,10 @@
     </main>
 
     <footer class="footer">
-        <div class="container">
-            <p>&copy; <?= date('Y') ?> <?= APP_NAME ?> - Tous droits réservés</p>
-            <p>Plateforme d'échange de livres entre lecteurs</p>
+        <div class="footer-links">
+            <a href="<?= APP_URL ?>/politique-confidentialite">Politique de confidentialité</a>
+            <a href="<?= APP_URL ?>/mentions-legales">Mentions légales</a>
+            <span>Tom Troc©</span>
         </div>
     </footer>
 

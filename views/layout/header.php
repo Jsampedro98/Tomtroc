@@ -20,7 +20,7 @@
                     <li><a href="<?= APP_URL ?>/books">Nos livres à l'échange</a></li>
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li><a href="<?= APP_URL ?>/messages">Messagerie</a></li>
-                        <li><a href="<?= APP_URL ?>/profile">Mon compte</a></li>
+                        <li><a href="<?= APP_URL ?>/account">Mon compte</a></li>
                         <li><a href="<?= APP_URL ?>/logout">Déconnexion</a></li>
                     <?php else: ?>
                         <li><a href="<?= APP_URL ?>/login">Connexion</a></li>

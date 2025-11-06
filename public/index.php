@@ -28,6 +28,11 @@ $router->get('/login', 'AuthController', 'showLogin');
 $router->post('/login', 'AuthController', 'login');
 $router->get('/logout', 'AuthController', 'logout');
 
+// Routes de compte utilisateur
+$router->get('/account', 'AccountController', 'index');
+$router->post('/account/update', 'AccountController', 'update');
+$router->post('/account/upload-photo', 'AccountController', 'uploadPhoto');
+
 // Routes de profil
 $router->get('/profile', 'ProfileController', 'show');
 $router->get('/profile/edit', 'ProfileController', 'edit');
