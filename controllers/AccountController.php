@@ -24,9 +24,16 @@ class AccountController extends Controller
     private User $userModel;
 
     /**
+     * Instance du modèle Book pour récupérer les livres de l'utilisateur
+     *
+     * @var Book
+     */
+    private Book $bookModel;
+
+    /**
      * Constructeur du contrôleur
      *
-     * Initialise le modèle User et vérifie l'authentification de l'utilisateur.
+     * Initialise les modèles User et Book et vérifie l'authentification de l'utilisateur.
      * Redirige automatiquement vers la page de connexion si non authentifié.
      *
      * @return void
@@ -34,6 +41,7 @@ class AccountController extends Controller
     public function __construct()
     {
         $this->userModel = new User();
+        $this->bookModel = new Book();
         $this->requireAuth();
     }
 
@@ -56,8 +64,8 @@ class AccountController extends Controller
             return;
         }
 
-        // TODO: Récupérer les livres de l'utilisateur
-        $books = [];
+        // Récupérer les livres de l'utilisateur
+        $books = $this->bookModel->findByUserId($userId);
 
         $this->render('account/index', [
             'user' => $user,

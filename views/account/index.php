@@ -121,45 +121,58 @@
     </div>
 </div>
 
-<?php if (!empty($books)): ?>
 <div class="library-section">
     <h3 class="library-section-title">BIBLIOTHEQUE</h3>
 
-    <table class="library-table">
-        <thead>
-            <tr>
-                <th>PHOTO</th>
-                <th>TITRE</th>
-                <th>AUTEUR</th>
-                <th>DESCRIPTION</th>
-                <th>DISPONIBILITE</th>
-                <th>ACTION</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($books as $book): ?>
-            <tr>
-                <td>
-                    <img src="<?= APP_URL . $book['photo'] ?>" alt="<?= htmlspecialchars($book['title']) ?>" class="book-thumb">
-                </td>
-                <td><?= htmlspecialchars($book['title']) ?></td>
-                <td><?= htmlspecialchars($book['author']) ?></td>
-                <td class="book-description"><?= htmlspecialchars(substr($book['description'], 0, 100)) ?>...</td>
-                <td>
-                    <span class="badge badge-<?= $book['available'] ? 'available' : 'unavailable' ?>">
-                        <?= $book['available'] ? 'disponible' : 'non dispo.' ?>
-                    </span>
-                </td>
-                <td class="book-actions">
-                    <a href="<?= APP_URL ?>/book/edit/<?= $book['id'] ?>" class="btn-action">Éditer</a>
-                    <a href="<?= APP_URL ?>/book/delete/<?= $book['id'] ?>" class="btn-action btn-action-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">Supprimer</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <?php if (!empty($books)): ?>
+        <table class="library-table">
+            <thead>
+                <tr>
+                    <th>PHOTO</th>
+                    <th>TITRE</th>
+                    <th>AUTEUR</th>
+                    <th>DESCRIPTION</th>
+                    <th>DISPONIBILITE</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($books as $book): ?>
+                <tr>
+                    <td class="library-td-photo">
+                        <?php if (!empty($book['image'])): ?>
+                            <img src="<?= APP_URL . $book['image'] ?>" alt="<?= htmlspecialchars($book['title']) ?>" class="book-thumb">
+                        <?php else: ?>
+                            <div class="book-thumb-placeholder">📚</div>
+                        <?php endif; ?>
+                    </td>
+                    <td class="library-td-title"><?= htmlspecialchars($book['title']) ?></td>
+                    <td class="library-td-author"><?= htmlspecialchars($book['author']) ?></td>
+                    <td class="library-td-description">
+                        <?= !empty($book['description']) ? htmlspecialchars(substr($book['description'], 0, 120)) . (strlen($book['description']) > 120 ? '...' : '') : '' ?>
+                    </td>
+                    <td class="library-td-availability">
+                        <span class="library-badge library-badge-<?= $book['available'] ? 'available' : 'unavailable' ?>">
+                            <?= $book['available'] ? 'disponible' : 'non dispo.' ?>
+                        </span>
+                    </td>
+                    <td class="library-td-actions">
+                        <a href="<?= APP_URL ?>/books/<?= $book['id'] ?>/edit" class="library-action-link">Éditer</a>
+                        <form method="POST" action="<?= APP_URL ?>/books/<?= $book['id'] ?>/delete" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">
+                            <button type="submit" class="library-action-link library-action-delete">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <div class="library-empty">
+            <p>📚 Vous n'avez pas encore ajouté de livres à votre bibliothèque.</p>
+            <a href="<?= APP_URL ?>/books/create" class="btn btn-primary">Ajouter mon premier livre</a>
+        </div>
+    <?php endif; ?>
 </div>
-<?php endif; ?>
 
 <script>
 // Afficher le champ nouveau mot de passe si l'utilisateur modifie le mot de passe actuel

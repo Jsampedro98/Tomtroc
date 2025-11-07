@@ -40,14 +40,15 @@ $router->post('/profile/update', 'ProfileController', 'update');
 $router->get('/profile/{id}', 'ProfileController', 'showPublic');
 
 // Routes des livres
-$router->get('/books', 'BookController', 'index');
-$router->get('/books/{id}', 'BookController', 'show');
-$router->get('/my-books', 'BookController', 'myBooks');
+// IMPORTANT : Les routes spécifiques doivent être avant les routes avec paramètres dynamiques
 $router->get('/books/create', 'BookController', 'create');
 $router->post('/books/store', 'BookController', 'store');
+$router->get('/books', 'BookController', 'index');
+$router->get('/books/{id}', 'BookController', 'show');
 $router->get('/books/{id}/edit', 'BookController', 'edit');
 $router->post('/books/{id}/update', 'BookController', 'update');
 $router->post('/books/{id}/delete', 'BookController', 'delete');
+$router->post('/books/{id}/toggle', 'BookController', 'toggleAvailability');
 
 // Routes de messagerie
 $router->get('/messages', 'MessageController', 'index');
