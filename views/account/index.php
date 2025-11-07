@@ -122,7 +122,10 @@
 </div>
 
 <div class="library-section">
-    <h3 class="library-section-title">BIBLIOTHEQUE</h3>
+    <div class="library-header">
+        <h3 class="library-section-title">BIBLIOTHEQUE</h3>
+        <a href="<?= APP_URL ?>/books/create" class="btn btn-primary">Ajouter un livre</a>
+    </div>
 
     <?php if (!empty($books)): ?>
         <table class="library-table">

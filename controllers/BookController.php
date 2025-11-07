@@ -37,6 +37,52 @@ class BookController extends Controller
     }
 
     /**
+     * Affiche la page publique de tous les livres disponibles
+     *
+     * Accessible à tous les visiteurs (connectés ou non).
+     * Permet la recherche par titre ou auteur.
+     *
+     * @return void
+     */
+    public function index(): void
+    {
+        $search = trim($_GET['search'] ?? '');
+        $filters = [];
+
+        if (!empty($search)) {
+            $filters['search'] = $search;
+        }
+
+        $books = $this->bookModel->findAll($filters, 100, 0);
+
+        $this->render('books/index', [
+            'books' => $books,
+            'search' => $search
+        ]);
+    }
+
+    /**
+     * Affiche le détail d'un livre
+     *
+     * Accessible à tous les visiteurs.
+     *
+     * @param int $id ID du livre
+     * @return void
+     */
+    public function show(int $id): void
+    {
+        $book = $this->bookModel->findById($id);
+
+        if (!$book) {
+            $_SESSION['flash_error'] = "Livre introuvable";
+            $this->redirect(APP_URL . '/books');
+            return;
+        }
+
+        $this->render('books/show', ['book' => $book]);
+    }
+
+    /**
      * Affiche le formulaire de création d'un livre
      *
      * Accessible uniquement aux utilisateurs connectés.
