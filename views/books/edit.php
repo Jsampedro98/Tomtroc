@@ -11,7 +11,7 @@
  * @subpackage Views
  * @author     TomTroc Team
  * @version    1.0.0
- * @since      Phase 3
+ * @since      Version 1.0
  */
 ?>
 

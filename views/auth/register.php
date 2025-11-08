@@ -50,6 +50,18 @@
                     >
                 </div>
 
+                <div class="form-group">
+                    <label for="confirm_password">Confirmer le mot de passe</label>
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        class="form-control"
+                        required
+                        minlength="6"
+                    >
+                </div>
+
                 <button type="submit" class="btn btn-primary">S'inscrire</button>
 
                 <div class="form-footer">

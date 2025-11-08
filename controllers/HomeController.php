@@ -3,7 +3,7 @@
 /**
  * Contrôleur pour la page d'accueil
  */
-class HomeController extends Controller
+class HomeController extends AbstractController
 {
     /**
      * Afficher la page d'accueil

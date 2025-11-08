@@ -12,9 +12,9 @@
  * @subpackage Controllers
  * @author     TomTroc Team
  * @version    1.0.0
- * @since      Phase 2
+ * @since      Version 1.0
  */
-class AccountController extends Controller
+class AccountController extends AbstractController
 {
     /**
      * Instance du modèle User pour les opérations en base de données

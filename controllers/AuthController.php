@@ -3,10 +3,17 @@
 /**
  * Contrôleur d'authentification
  */
-class AuthController extends Controller
+class AuthController extends AbstractController
 {
     private User $userModel;
 
+    /**
+     * Constructeur du contrôleur d'authentification
+     *
+     * Initialise le modèle User pour gérer les opérations liées aux utilisateurs.
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->userModel = new User();

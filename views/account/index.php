@@ -9,13 +9,13 @@
  *
  * Variables attendues :
  * @var array $user  Données de l'utilisateur connecté (id, pseudo, email, photo, created_at)
- * @var array $books Liste des livres de l'utilisateur (vide en Phase 2, remplie en Phase 3)
+ * @var array $books Liste des livres de l'utilisateur
  *
  * @package    TomTroc
  * @subpackage Views
  * @author     TomTroc Team
  * @version    1.0.0
- * @since      Phase 2
+ * @since      Version 1.0
  */
 ?>
 

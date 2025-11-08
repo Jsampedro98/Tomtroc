@@ -14,7 +14,7 @@
  * @subpackage Views
  * @author     TomTroc Team
  * @version    1.0.0
- * @since      Phase 4
+ * @since      Version 1.0
  */
 ?>
 
@@ -49,7 +49,7 @@
 
             <h3 class="book-detail-section-title">PROPRIÉTAIRE</h3>
             <div class="book-detail-owner">
-                <div class="book-detail-owner-info">
+                <a href="<?= APP_URL ?>/profile/<?= $book['user_id'] ?>" class="book-detail-owner-info">
                     <?php if (!empty($book['owner_photo'])): ?>
                         <img src="<?= APP_URL . $book['owner_photo'] ?>" alt="<?= htmlspecialchars($book['owner_pseudo']) ?>" class="book-detail-owner-photo">
                     <?php else: ?>
@@ -58,10 +58,10 @@
                         </div>
                     <?php endif; ?>
                     <span class="book-detail-owner-pseudo"><?= htmlspecialchars($book['owner_pseudo']) ?></span>
-                </div>
+                </a>
 
                 <?php if ($this->isLoggedIn() && $book['user_id'] != $this->getUserId()): ?>
-                    <a href="<?= APP_URL ?>/messages/new?to=<?= $book['user_id'] ?>&book=<?= $book['id'] ?>" class="btn btn-primary btn-message">
+                    <a href="<?= APP_URL ?>/messages/new?user_id=<?= $book['user_id'] ?>&book_id=<?= $book['id'] ?>" class="btn btn-primary btn-message">
                         Envoyer un message
                     </a>
                 <?php elseif (!$this->isLoggedIn()): ?>

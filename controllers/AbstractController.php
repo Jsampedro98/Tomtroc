@@ -3,7 +3,7 @@
 /**
  * Classe Controller - Classe de base pour tous les contrôleurs
  */
-abstract class Controller
+abstract class AbstractController
 {
     /**
      * Rendre une vue

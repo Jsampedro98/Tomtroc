@@ -13,7 +13,7 @@
  * @subpackage Models
  * @author     TomTroc Team
  * @version    1.0.0
- * @since      Phase 3
+ * @since      Version 1.0
  */
 class Book
 {
@@ -146,6 +146,17 @@ class Book
     }
 
     /**
+     * Alias pour count() - Compte tous les livres selon filtres
+     *
+     * @param array $filters Filtres optionnels
+     * @return int Nombre de livres
+     */
+    public function countAll(array $filters = []): int
+    {
+        return $this->count($filters);
+    }
+
+    /**
      * Crée un nouveau livre
      *
      * @param array $data Données du livre (user_id, title, author, description, photo, available)
@@ -246,6 +257,7 @@ class Book
         ]);
         return $stmt->fetchColumn() > 0;
     }
+
 
     /**
      * Récupère d'autres livres du même propriétaire (pour suggestions)

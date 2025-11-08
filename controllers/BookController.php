@@ -13,9 +13,9 @@
  * @subpackage Controllers
  * @author     TomTroc Team
  * @version    1.0.0
- * @since      Phase 3
+ * @since      Version 1.0
  */
-class BookController extends Controller
+class BookController extends AbstractController
 {
     /**
      * Instance du modèle Book pour les opérations en base de données
@@ -47,19 +47,39 @@ class BookController extends Controller
     public function index(): void
     {
         $search = trim($_GET['search'] ?? '');
+        $availableOnly = $_GET['available_only'] ?? '';
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $perPage = 12; // 12 livres par page (3 lignes de 4)
+
         $filters = [];
 
         if (!empty($search)) {
             $filters['search'] = $search;
         }
 
-        $books = $this->bookModel->findAll($filters, 100, 0);
+        if ($availableOnly === '1') {
+            $filters['available'] = 1;
+        }
+
+        // Calculer le nombre total de livres et de pages
+        $totalBooks = $this->bookModel->countAll($filters);
+        $totalPages = max(1, ceil($totalBooks / $perPage));
+
+        // Limiter la page actuelle au nombre total de pages
+        $page = min($page, $totalPages);
+
+        $offset = ($page - 1) * $perPage;
+        $books = $this->bookModel->findAll($filters, $perPage, $offset);
 
         $this->render('books/index', [
             'books' => $books,
-            'search' => $search
+            'search' => $search,
+            'availableOnly' => $availableOnly,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
+
 
     /**
      * Affiche le détail d'un livre
