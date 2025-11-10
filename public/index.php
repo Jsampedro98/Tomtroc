@@ -52,6 +52,7 @@ $router->post('/books/{id}/toggle', 'BookController', 'toggleAvailability');
 
 // Routes de messagerie
 $router->get('/messages', 'MessageController', 'index');
+$router->get('/messages/new', 'MessageController', 'newMessage');
 $router->get('/messages/{id}', 'MessageController', 'show');
 $router->post('/messages/send', 'MessageController', 'send');
 
