@@ -1,14 +1,18 @@
 <?php
 
 /**
- * Configuration générale de l'application TomTroc
- * 
+ * Configuration générale de l'application TomTroc - EXEMPLE
+ *
  * Ce fichier contient toutes les constantes de configuration de l'application :
  * - Chemins des répertoires
  * - Paramètres de base de données
  * - Configuration de sécurité
  * - Gestion des erreurs
- * 
+ *
+ * INSTRUCTIONS :
+ * 1. Copiez ce fichier vers config.php
+ * 2. Modifiez les valeurs de configuration selon votre environnement
+ *
  * @package TomTroc
  * @author  TomTroc Team
  * @version 1.0.0
@@ -45,13 +49,13 @@ define('UPLOAD_PATH', PUBLIC_PATH . '/uploads');
 define('DB_HOST', 'localhost');
 
 /** @var string Nom de la base de données */
-define('DB_NAME', 'tomtroc');
+define('DB_NAME', 'your_database_name');
 
 /** @var string Utilisateur de la base de données */
-define('DB_USER', 'root');
+define('DB_USER', 'your_username');
 
 /** @var string Mot de passe de la base de données */
-define('DB_PASS', '');
+define('DB_PASS', 'your_password');
 
 /** @var string Charset de la base de données */
 define('DB_CHARSET', 'utf8mb4');
