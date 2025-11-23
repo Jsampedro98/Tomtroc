@@ -45,14 +45,16 @@ class MessageController extends AbstractController
     }
 
     /**
-     * Afficher la liste des conversations
+     * Afficher la liste des conversations et éventuellement une conversation
      *
      * Accessible uniquement aux utilisateurs connectés.
      * Affiche la liste de toutes les conversations avec compteur de non-lus.
+     * Si $otherUserId est fourni, affiche également la conversation dans le panneau droit.
      *
+     * @param int|null $otherUserId ID de l'utilisateur avec qui afficher la conversation
      * @return void
      */
-    public function index(): void
+    public function index(?int $otherUserId = null): void
     {
         $this->requireAuth();
 
@@ -60,73 +62,41 @@ class MessageController extends AbstractController
         $conversations = $this->messageModel->getConversations($userId);
         $unreadTotal = $this->messageModel->countUnread($userId);
 
-        $this->render('messages/index', [
+        $data = [
             'conversations' => $conversations,
-            'unreadTotal' => $unreadTotal
-        ]);
+            'unreadTotal' => $unreadTotal,
+            'selectedUserId' => $otherUserId,
+            'messages' => null,
+            'otherUser' => null
+        ];
+
+        // Si une conversation est sélectionnée, charger ses données
+        if ($otherUserId) {
+            $otherUser = $this->userModel->findById($otherUserId);
+            if ($otherUser) {
+                $data['messages'] = $this->messageModel->getConversationMessages($userId, $otherUserId);
+                $data['otherUser'] = $otherUser;
+
+                // Marquer les messages reçus comme lus
+                $this->messageModel->markAsRead($userId, $otherUserId);
+            }
+        }
+
+        $this->render('messages/index', $data);
     }
 
     /**
      * Afficher une conversation avec un utilisateur
      *
-     * Accessible uniquement aux utilisateurs connectés.
-     * Affiche tous les messages échangés avec un utilisateur spécifique.
-     * Marque automatiquement les messages reçus comme lus.
+     * Redirige vers index() avec l'ID de l'utilisateur pour afficher
+     * la conversation dans le layout split-screen.
      *
      * @param int $otherUserId ID de l'autre utilisateur
      * @return void
      */
     public function show(int $otherUserId): void
     {
-        $this->requireAuth();
-
-        $userId = $this->getUserId();
-
-        // Vérifier que l'autre utilisateur existe
-        $otherUser = $this->userModel->findById($otherUserId);
-        if (!$otherUser) {
-            $_SESSION['flash_error'] = "Utilisateur introuvable";
-            $this->redirect(APP_URL . '/messages');
-            return;
-        }
-
-        // Récupérer les messages de la conversation
-        $messages = $this->messageModel->getConversationMessages($userId, $otherUserId);
-
-        // Marquer les messages reçus comme lus
-        $this->messageModel->markAsRead($userId, $otherUserId);
-
-        $this->render('messages/conversation', [
-            'messages' => $messages,
-            'otherUser' => $otherUser,
-            'userId' => $userId
-        ]);
-    }
-
-    /**
-     * Afficher le formulaire de nouveau message
-     *
-     * Accessible uniquement aux utilisateurs connectés.
-     * Permet de démarrer une nouvelle conversation.
-     *
-     * @return void
-     */
-    public function newMessage(): void
-    {
-        $this->requireAuth();
-
-        $recipientId = isset($_GET['user_id']) ? (int)$_GET['user_id'] : null;
-        $bookId = isset($_GET['book_id']) ? (int)$_GET['book_id'] : null;
-
-        $recipient = null;
-        if ($recipientId) {
-            $recipient = $this->userModel->findById($recipientId);
-        }
-
-        $this->render('messages/new', [
-            'recipient' => $recipient,
-            'bookId' => $bookId
-        ]);
+        $this->index($otherUserId);
     }
 
     /**
@@ -179,7 +149,7 @@ class MessageController extends AbstractController
         if (!empty($errors)) {
             $_SESSION['flash_error'] = implode('<br>', $errors);
             $_SESSION['old_content'] = $content;
-            $this->redirect(APP_URL . '/messages/new?user_id=' . $receiverId);
+            $this->redirect(APP_URL . '/messages/' . $receiverId);
             return;
         }
 
@@ -191,7 +161,7 @@ class MessageController extends AbstractController
             $this->redirect(APP_URL . '/messages/' . $receiverId);
         } else {
             $_SESSION['flash_error'] = "Erreur lors de l'envoi du message";
-            $this->redirect(APP_URL . '/messages/new?user_id=' . $receiverId);
+            $this->redirect(APP_URL . '/messages/' . $receiverId);
         }
     }
 }

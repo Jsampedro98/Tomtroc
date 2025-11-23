@@ -61,7 +61,7 @@
                 </a>
 
                 <?php if ($this->isLoggedIn() && $book['user_id'] != $this->getUserId()): ?>
-                    <a href="<?= APP_URL ?>/messages/new?user_id=<?= $book['user_id'] ?>&book_id=<?= $book['id'] ?>" class="btn btn-primary btn-message">
+                    <a href="<?= APP_URL ?>/messages/<?= $book['user_id'] ?>" class="btn btn-primary btn-message">
                         Envoyer un message
                     </a>
                 <?php elseif (!$this->isLoggedIn()): ?>

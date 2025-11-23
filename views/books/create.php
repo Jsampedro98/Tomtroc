@@ -13,11 +13,10 @@
  */
 ?>
 
-<div class="book-form-container">
-    <div class="book-form-header">
-        <h1>Ajouter un livre</h1>
-        <a href="<?= APP_URL ?>/account" class="btn-back">← Retour à mon compte</a>
-    </div>
+<div class="book-form-page">
+    <a href="<?= APP_URL ?>/account" class="book-form-back">← retour</a>
+
+    <h1 class="book-form-title">Ajouter un livre</h1>
 
     <?php if (isset($_SESSION['flash_error'])): ?>
         <div class="alert alert-error">
@@ -26,10 +25,30 @@
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="<?= APP_URL ?>/books/store" enctype="multipart/form-data" class="book-form">
-        <div class="form-row">
+    <form method="POST" action="<?= APP_URL ?>/books/store" enctype="multipart/form-data" class="book-form-grid">
+        <div class="book-form-photo-section">
+            <label>Photo</label>
+
+            <div class="book-photo-placeholder" id="placeholder">
+                📚
+            </div>
+
+            <button type="button" class="book-photo-change" onclick="document.getElementById('photo').click()">ajouter une photo</button>
+
+            <input
+                type="file"
+                id="photo"
+                name="photo"
+                class="book-photo-input"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                style="display: none;"
+            >
+            <div id="preview" class="book-photo-new-preview"></div>
+        </div>
+
+        <div class="book-form-fields-section">
             <div class="form-group">
-                <label for="title">Titre du livre *</label>
+                <label for="title">Titre</label>
                 <input
                     type="text"
                     id="title"
@@ -38,13 +57,12 @@
                     value="<?= isset($_SESSION['old_title']) ? htmlspecialchars($_SESSION['old_title']) : '' ?>"
                     required
                     minlength="2"
-                    placeholder="Ex: Le Seigneur des Anneaux"
                 >
                 <?php unset($_SESSION['old_title']); ?>
             </div>
 
             <div class="form-group">
-                <label for="author">Auteur *</label>
+                <label for="author">Auteur</label>
                 <input
                     type="text"
                     id="author"
@@ -53,49 +71,30 @@
                     value="<?= isset($_SESSION['old_author']) ? htmlspecialchars($_SESSION['old_author']) : '' ?>"
                     required
                     minlength="2"
-                    placeholder="Ex: J.R.R. Tolkien"
                 >
                 <?php unset($_SESSION['old_author']); ?>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea
-                id="description"
-                name="description"
-                class="form-control"
-                rows="6"
-                placeholder="Donnez une brève description du livre..."
-            ><?= isset($_SESSION['old_description']) ? htmlspecialchars($_SESSION['old_description']) : '' ?></textarea>
-            <?php unset($_SESSION['old_description']); ?>
-        </div>
-
-        <div class="form-group">
-            <label for="photo">Photo du livre</label>
-            <div class="file-upload-wrapper">
-                <input
-                    type="file"
-                    id="photo"
-                    name="photo"
-                    class="form-control-file"
-                    accept="image/jpeg,image/png,image/gif,image/webp"
-                >
-                <small class="form-help">Formats acceptés : JPG, PNG, GIF, WEBP (max 5MB)</small>
-                <div id="preview" class="image-preview"></div>
+            <div class="form-group">
+                <label for="description">Commentaire</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    class="form-control"
+                    rows="10"
+                ><?= isset($_SESSION['old_description']) ? htmlspecialchars($_SESSION['old_description']) : '' ?></textarea>
+                <?php unset($_SESSION['old_description']); ?>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="checkbox-label">
-                <input type="checkbox" name="available" checked>
-                <span>Livre disponible à l'échange</span>
-            </label>
-        </div>
+            <div class="form-group">
+                <label for="available">Disponibilité</label>
+                <select id="available" name="available" class="form-control">
+                    <option value="1" selected>disponible</option>
+                    <option value="0">non disponible</option>
+                </select>
+            </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Ajouter le livre</button>
-            <a href="<?= APP_URL ?>/account" class="btn btn-secondary">Annuler</a>
+            <button type="submit" class="btn btn-primary">Valider</button>
         </div>
     </form>
 </div>
@@ -104,16 +103,19 @@
 // Prévisualisation de l'image
 document.getElementById('photo').addEventListener('change', function(e) {
     const preview = document.getElementById('preview');
+    const placeholder = document.getElementById('placeholder');
     const file = e.target.files[0];
 
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
+            if (placeholder) placeholder.style.display = 'none';
             preview.innerHTML = '<img src="' + e.target.result + '" alt="Prévisualisation">';
             preview.style.display = 'block';
         }
         reader.readAsDataURL(file);
     } else {
+        if (placeholder) placeholder.style.display = 'flex';
         preview.innerHTML = '';
         preview.style.display = 'none';
     }

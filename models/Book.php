@@ -281,4 +281,27 @@ class Book
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Récupère les derniers livres ajoutés
+     *
+     * Utilisé pour la page d'accueil - affiche les derniers livres
+     * avec les informations du propriétaire
+     *
+     * @param int $limit Nombre de livres à récupérer (défaut: 4)
+     * @return array Liste des derniers livres avec pseudo du propriétaire
+     */
+    public function getLatestBooks(int $limit = 4): array
+    {
+        $stmt = $this->pdo->prepare('
+            SELECT b.*, u.pseudo as owner_pseudo
+            FROM books b
+            INNER JOIN users u ON b.user_id = u.id
+            ORDER BY b.created_at DESC
+            LIMIT :limit
+        ');
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

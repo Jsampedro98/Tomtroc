@@ -34,19 +34,7 @@
                     value="<?= htmlspecialchars($search ?? '') ?>"
                     class="books-search-input"
                 >
-                <input type="hidden" name="available_only" id="availableOnlyHidden" value="<?= htmlspecialchars($availableOnly ?? '') ?>">
             </form>
-
-            <div class="books-filter-toggle">
-                <label class="filter-checkbox-label">
-                    <input
-                        type="checkbox"
-                        id="availableOnlyCheckbox"
-                        <?= (!empty($availableOnly) && $availableOnly === '1') ? 'checked' : '' ?>
-                    >
-                    <span>Disponibles uniquement</span>
-                </label>
-            </div>
         </div>
     </div>
 
@@ -78,7 +66,7 @@
         <?php if ($totalPages > 1): ?>
             <div class="pagination">
                 <?php if ($currentPage > 1): ?>
-                    <a href="<?= APP_URL ?>/books?page=<?= $currentPage - 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?><?= !empty($availableOnly) ? '&available_only=1' : '' ?>" class="pagination-btn">
+                    <a href="<?= APP_URL ?>/books?page=<?= $currentPage - 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="pagination-btn">
                         ← Précédent
                     </a>
                 <?php endif; ?>
@@ -88,7 +76,7 @@
                         <?php if ($i === $currentPage): ?>
                             <span class="pagination-number pagination-current"><?= $i ?></span>
                         <?php else: ?>
-                            <a href="<?= APP_URL ?>/books?page=<?= $i ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?><?= !empty($availableOnly) ? '&available_only=1' : '' ?>" class="pagination-number">
+                            <a href="<?= APP_URL ?>/books?page=<?= $i ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="pagination-number">
                                 <?= $i ?>
                             </a>
                         <?php endif; ?>
@@ -96,7 +84,7 @@
                 </div>
 
                 <?php if ($currentPage < $totalPages): ?>
-                    <a href="<?= APP_URL ?>/books?page=<?= $currentPage + 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?><?= !empty($availableOnly) ? '&available_only=1' : '' ?>" class="pagination-btn">
+                    <a href="<?= APP_URL ?>/books?page=<?= $currentPage + 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>" class="pagination-btn">
                         Suivant →
                     </a>
                 <?php endif; ?>
@@ -109,11 +97,3 @@
     <?php endif; ?>
 </div>
 
-<script>
-// Soumettre le formulaire quand on coche/décoche "Disponibles uniquement"
-document.getElementById('availableOnlyCheckbox').addEventListener('change', function() {
-    const hiddenInput = document.getElementById('availableOnlyHidden');
-    hiddenInput.value = this.checked ? '1' : '';
-    document.getElementById('searchForm').submit();
-});
-</script>

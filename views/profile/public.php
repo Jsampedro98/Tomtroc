@@ -18,67 +18,66 @@
  */
 ?>
 
-<div class="profile-public-container">
-    <div class="profile-public-header">
-        <div class="profile-public-info">
+<div class="account-container">
+    <div class="account-sidebar">
+        <div class="profile-section">
             <?php if (!empty($user['photo'])): ?>
-                <img src="<?= APP_URL . $user['photo'] ?>" alt="<?= htmlspecialchars($user['pseudo']) ?>" class="profile-public-photo">
+                <img src="<?= APP_URL . $user['photo'] ?>" alt="<?= htmlspecialchars($user['pseudo']) ?>" class="profile-photo">
             <?php else: ?>
-                <div class="profile-public-photo-placeholder">
+                <div class="profile-photo-placeholder">
                     <?= strtoupper(substr($user['pseudo'], 0, 2)) ?>
                 </div>
             <?php endif; ?>
+        </div>
 
-            <div class="profile-public-details">
-                <h1><?= htmlspecialchars($user['pseudo']) ?></h1>
-                <p class="profile-public-member-since">
-                    Membre depuis <?= date('Y', strtotime($user['created_at'])) ?>
-                </p>
-                <p class="profile-public-library-count">
-                    📚 <?= count($books) ?> livre<?= count($books) > 1 ? 's' : '' ?>
-                    <?php if ($availableCount > 0): ?>
-                        (<?= $availableCount ?> disponible<?= $availableCount > 1 ? 's' : '' ?>)
-                    <?php endif; ?>
-                </p>
-            </div>
+        <h2 class="profile-name"><?= htmlspecialchars($user['pseudo']) ?></h2>
+        <p class="profile-member-since">Membre depuis <?= date('n') >= date('n', strtotime($user['created_at'])) ? date('Y') - date('Y', strtotime($user['created_at'])) : date('Y') - date('Y', strtotime($user['created_at'])) - 1 ?> an<?= (date('Y') - date('Y', strtotime($user['created_at']))) > 1 ? 's' : '' ?></p>
+
+        <div class="profile-library-info">
+            <span class="library-label">BIBLIOTHEQUE</span>
+            <span class="library-count">📚 <?= count($books) ?> livre<?= count($books) > 1 ? 's' : '' ?></span>
         </div>
 
         <?php if ($this->isLoggedIn() && $this->getUserId() != $user['id']): ?>
-            <a href="<?= APP_URL ?>/messages/new?user_id=<?= $user['id'] ?>" class="btn btn-primary">
-                Envoyer un message
+            <a href="<?= APP_URL ?>/messages/<?= $user['id'] ?>" class="btn btn-primary-outline profile-public-message-btn">
+                Écrire un message
             </a>
         <?php endif; ?>
     </div>
 
-    <div class="profile-public-books">
-        <h2>Livres de <?= htmlspecialchars($user['pseudo']) ?></h2>
-
+    <div class="library-section profile-public-library">
         <?php if (!empty($books)): ?>
-            <div class="books-grid">
-                <?php foreach ($books as $book): ?>
-                    <a href="<?= APP_URL ?>/books/<?= $book['id'] ?>" class="book-card">
-                        <div class="book-card-image">
+            <table class="library-table">
+                <thead>
+                    <tr>
+                        <th>PHOTO</th>
+                        <th>TITRE</th>
+                        <th>AUTEUR</th>
+                        <th>DESCRIPTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($books as $book): ?>
+                    <tr>
+                        <td class="library-td-photo">
                             <?php if (!empty($book['image'])): ?>
-                                <img src="<?= APP_URL . $book['image'] ?>" alt="<?= htmlspecialchars($book['title']) ?>">
+                                <img src="<?= APP_URL . $book['image'] ?>" alt="<?= htmlspecialchars($book['title']) ?>" class="book-thumb">
                             <?php else: ?>
-                                <div class="book-card-placeholder">📚</div>
+                                <div class="book-thumb-placeholder">📚</div>
                             <?php endif; ?>
-
-                            <?php if (!$book['available']): ?>
-                                <span class="book-card-badge-unavailable">non dispo.</span>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="book-card-content">
-                            <h3 class="book-card-title"><?= htmlspecialchars($book['title']) ?></h3>
-                            <p class="book-card-author"><?= htmlspecialchars($book['author']) ?></p>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+                        </td>
+                        <td class="library-td-title"><?= htmlspecialchars($book['title']) ?></td>
+                        <td class="library-td-author"><?= htmlspecialchars($book['author']) ?></td>
+                        <td class="library-td-description">
+                            <?= !empty($book['description']) ? htmlspecialchars(substr($book['description'], 0, 120)) . (strlen($book['description']) > 120 ? '...' : '') : '' ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         <?php else: ?>
-            <div class="books-empty">
-                <p><?= htmlspecialchars($user['pseudo']) ?> n'a pas encore ajouté de livres.</p>
+            <div class="library-empty">
+                <p>📚 <?= htmlspecialchars($user['pseudo']) ?> n'a pas encore ajouté de livres.</p>
             </div>
         <?php endif; ?>
     </div>

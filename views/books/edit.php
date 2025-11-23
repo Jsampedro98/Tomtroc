@@ -15,11 +15,10 @@
  */
 ?>
 
-<div class="book-form-container">
-    <div class="book-form-header">
-        <h1>Modifier le livre</h1>
-        <a href="<?= APP_URL ?>/account" class="btn-back">← Retour à mon compte</a>
-    </div>
+<div class="book-form-page">
+    <a href="<?= APP_URL ?>/account" class="book-form-back">← retour</a>
+
+    <h1 class="book-form-title">Modifier les informations</h1>
 
     <?php if (isset($_SESSION['flash_error'])): ?>
         <div class="alert alert-error">
@@ -28,10 +27,36 @@
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="<?= APP_URL ?>/books/<?= $book['id'] ?>/update" enctype="multipart/form-data" class="book-form">
-        <div class="form-row">
+    <form method="POST" action="<?= APP_URL ?>/books/<?= $book['id'] ?>/update" enctype="multipart/form-data" class="book-form-grid">
+        <div class="book-form-photo-section">
+            <label>Photo</label>
+
+            <?php if (!empty($book['image'])): ?>
+                <div class="book-photo-preview">
+                    <img src="<?= APP_URL . $book['image'] ?>" alt="<?= htmlspecialchars($book['title']) ?>">
+                </div>
+            <?php else: ?>
+                <div class="book-photo-placeholder">
+                    📚
+                </div>
+            <?php endif; ?>
+
+            <button type="button" class="book-photo-change" onclick="document.getElementById('photo').click()">modifier la photo</button>
+
+            <input
+                type="file"
+                id="photo"
+                name="photo"
+                class="book-photo-input"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                style="display: none;"
+            >
+            <div id="preview" class="book-photo-new-preview"></div>
+        </div>
+
+        <div class="book-form-fields-section">
             <div class="form-group">
-                <label for="title">Titre du livre *</label>
+                <label for="title">Titre</label>
                 <input
                     type="text"
                     id="title"
@@ -44,7 +69,7 @@
             </div>
 
             <div class="form-group">
-                <label for="author">Auteur *</label>
+                <label for="author">Auteur</label>
                 <input
                     type="text"
                     id="author"
@@ -55,51 +80,26 @@
                     minlength="2"
                 >
             </div>
-        </div>
 
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea
-                id="description"
-                name="description"
-                class="form-control"
-                rows="6"
-            ><?= htmlspecialchars($book['description'] ?? '') ?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="photo">Changer la photo</label>
-
-            <?php if (!empty($book['image'])): ?>
-                <div class="current-photo">
-                    <img src="<?= APP_URL . $book['image'] ?>" alt="<?= htmlspecialchars($book['title']) ?>">
-                    <p>Photo actuelle</p>
-                </div>
-            <?php endif; ?>
-
-            <div class="file-upload-wrapper">
-                <input
-                    type="file"
-                    id="photo"
-                    name="photo"
-                    class="form-control-file"
-                    accept="image/jpeg,image/png,image/gif,image/webp"
-                >
-                <small class="form-help">Formats acceptés : JPG, PNG, GIF, WEBP (max 5MB). Laissez vide pour garder la photo actuelle.</small>
-                <div id="preview" class="image-preview"></div>
+            <div class="form-group">
+                <label for="description">Commentaire</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    class="form-control"
+                    rows="10"
+                ><?= htmlspecialchars($book['description'] ?? '') ?></textarea>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="checkbox-label">
-                <input type="checkbox" name="available" <?= $book['available'] ? 'checked' : '' ?>>
-                <span>Livre disponible à l'échange</span>
-            </label>
-        </div>
+            <div class="form-group">
+                <label for="available">Disponibilité</label>
+                <select id="available" name="available" class="form-control">
+                    <option value="1" <?= $book['available'] ? 'selected' : '' ?>>disponible</option>
+                    <option value="0" <?= !$book['available'] ? 'selected' : '' ?>>non disponible</option>
+                </select>
+            </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-            <a href="<?= APP_URL ?>/account" class="btn btn-secondary">Annuler</a>
+            <button type="submit" class="btn btn-primary">Valider</button>
         </div>
     </form>
 </div>
@@ -113,7 +113,7 @@ document.getElementById('photo').addEventListener('change', function(e) {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            preview.innerHTML = '<img src="' + e.target.result + '" alt="Prévisualisation"><p>Nouvelle photo</p>';
+            preview.innerHTML = '<img src="' + e.target.result + '" alt="Prévisualisation">';
             preview.style.display = 'block';
         }
         reader.readAsDataURL(file);
